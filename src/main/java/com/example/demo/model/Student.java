@@ -78,6 +78,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return name + ' ' + id;
+        return "id" + id + ' ' + name + " age:" + age + "Lessons: " + lessons.toString();
     }
 }

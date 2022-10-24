@@ -14,7 +14,11 @@ public interface LessonRepository extends Neo4jRepository<Lesson, Long> {
     void connect(@Param("student") Student student, @Param("lesson") Lesson lesson);
 
     @Query("match(l1:Lesson)<-[:has_lesson_of]-(s:Student)-[:has_lesson_of]->(l2:Lesson) return l2")
-    List<Lesson> match();
+    List<Lesson> matchLessonsWithStudents();
+
+
+    @Query("MATCH (l:Lesson) DETACH DELETE l")
+    void deleteAllLessons();
 
     @Query("match(l1:Lesson {title : :#{#lesson1.title}}), (l2:Team {title: :#{#lesson2.title}})," +
             " path = shortestPath((l1)-[:has_lesson_of*]-(l2)) return length(path)")

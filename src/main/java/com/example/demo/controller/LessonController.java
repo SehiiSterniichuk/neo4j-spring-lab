@@ -2,13 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.data.LessonNodePath;
 import com.example.demo.model.Lesson;
+import com.example.demo.model.Student;
 import com.example.demo.repository.LessonRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.fabric.StudentsFabric;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,10 +36,10 @@ public class LessonController {
 
     @GetMapping("/match")
     public List<Lesson> match(){
-        return lessonRepository.match();
+        return lessonRepository.matchLessonsWithStudents();
     }
 
-    @PostMapping("/connect")
+    @RequestMapping(value = "/connect", method = RequestMethod.GET)
     public void connect(){
         var students = fabric.generateRandomListOfStudents(7);
         studentRepository.saveAll(students);
@@ -50,9 +48,15 @@ public class LessonController {
         lessons.forEach(l->{// here we are connecting random amount of students to the lesson l
             for (int i = 0; i < rand.nextInt(size); i++) {
                 int randomStudentIndex = rand.nextInt(size);
-                lessonRepository.connect(students.get(randomStudentIndex),l);
+                Student student = students.get(randomStudentIndex);
+                lessonRepository.connect(student,l);
             }
         });
+    }
+
+    @RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
+    public void deleteAll(){
+        lessonRepository.deleteAllLessons();
     }
 
     @GetMapping("/pathLength")
