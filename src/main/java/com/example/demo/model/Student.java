@@ -4,10 +4,7 @@ package com.example.demo.model;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-
 import java.util.Objects;
-import java.util.Set;
 
 @Node
 public class Student {
@@ -16,8 +13,6 @@ public class Student {
     private Long id;
     private String name;
     private int age;
-    @Relationship(type = "has_lesson_of", direction = Relationship.Direction.OUTGOING)
-    private Set<Lesson> lessons;
 
     public Student() {
     }
@@ -51,17 +46,9 @@ public class Student {
         this.age = age;
     }
 
-    public Set<Lesson> getLessons() {
-        return lessons;
-    }
-
-    public void setLessons(Set<Lesson> lessons) {
-        this.lessons = lessons;
-    }
-
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age);
+        return Objects.hash(name, age);
     }
 
     @Override
@@ -72,12 +59,12 @@ public class Student {
         if (!(obj instanceof Student student)) {
             return false;
         }
-        return Objects.equals(this.id, student.id) && Objects.equals(name, student.name)
-                && Objects.equals(age, student.age) && Objects.equals(lessons, student.lessons);
+        return Objects.equals(name, student.name)
+                && Objects.equals(age, student.age);
     }
 
     @Override
     public String toString() {
-        return "id" + id + ' ' + name + " age:" + age + "Lessons: " + lessons.toString();
+        return "id " + id + ' ' + name + " age:" + age;
     }
 }
